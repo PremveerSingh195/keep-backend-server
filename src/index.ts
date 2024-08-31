@@ -1,16 +1,16 @@
 import dotenv from 'dotenv'
-import connectDB from "./db/index.ts";
-import { app } from './app.ts';
+import connectDB from "./db/index";
+import { app } from './app';
 
 dotenv.config({
     path : './env'
 })
 
-const Port  = process.env.PORT  || 3000 
+const Port : number = parseInt(process.env.PORT  || '3000' , 10) 
 
 connectDB()
 .then(()=> {
-    app.listen(Port , (Port)=>{
+    app.listen(Port , ()=>{
         console.log(`App is listen on the port${Port}`);
     })
 })
