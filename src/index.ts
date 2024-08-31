@@ -11,7 +11,7 @@ const Port : number = parseInt(process.env.PORT  || '3000' , 10)
 connectDB()
 .then(()=> {
     app.listen(Port , ()=>{
-        console.log(`App is listen on the port${Port}`);
+        console.log(`App is listen on the port : ${Port}`);
     })
 })
 .catch((error)=>{
