@@ -3,7 +3,7 @@ import connectDB from "./db/index";
 import { app } from './app';
 
 dotenv.config({
-    path : './env'
+    path : './.env'
 })
 
 const Port : number = parseInt(process.env.PORT  || '3000' , 10) 

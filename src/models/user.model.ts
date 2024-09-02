@@ -1,4 +1,4 @@
-import mongoose , {Schema , Document} from "mongoose";
+import mongoose , {Schema , Document , ObjectId} from "mongoose";
 import jwt from "jsonwebtoken"
 import bcryptjs from "bcryptjs";
 
@@ -11,6 +11,7 @@ interface IUser extends Document {
     password : string;
     refreshtoken? : string ;
     isPasswordCorrect (password : string) : Promise<boolean>
+    _id : ObjectId
 }
 
 
