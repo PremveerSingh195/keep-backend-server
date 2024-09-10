@@ -60,7 +60,7 @@ export  const registerUser = asyncHandler(async (req , res) => {
      const newUser:UserCreateInput = {
         Fullname,
         avatar: avatar.url,
-        userName: userName.toLowerCase(),
+        userName: userName,
         email,
         password,
      }
