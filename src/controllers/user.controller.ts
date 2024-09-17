@@ -15,7 +15,7 @@ export  const registerUser = asyncHandler(async (req , res) => {
         if (
             [userName, email ,Fullname  , password].some((fields) => fields?.trim() === "" )
         ) {
-            throw new ApiError(400 , "All fields are required")
+          throw new ApiError(400 , "All fields are required")
         }
     // checking same user is present or not in database
 
@@ -78,4 +78,26 @@ export  const registerUser = asyncHandler(async (req , res) => {
      return res.status(201).json(
         new ApiResponse(200 , foundUser , "User registered Successfully")
      )
+})
+
+export const loginUser  =asyncHandler(async(req , res) => {
+  const {email , password} = req.body
+
+  if (!email && !password) {
+    throw new ApiError(400 , "email and password required for login")
+  }
+
+  const user = await User.findOne({
+    email: email
+  })
+
+  if (!user) {
+    throw new ApiError(404 ,  "user does not exist")
+  }
+
+  const isPasswordValid = await user.isPasswordCorrect(password)
+
+  if (!isPasswordValid) {
+    throw new ApiError(401 , "Invalid credentials")
+  }
 })
