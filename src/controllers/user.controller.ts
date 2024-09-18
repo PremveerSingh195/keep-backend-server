@@ -5,7 +5,27 @@ import { uploadOnCloudinary } from "../utils/Cloudinary";
 import { ObjectId } from "mongoose";
 import { ApiResponse } from "../utils/ApiResponse";
 
-export  const registerUser = asyncHandler(async (req , res) => {
+const generateAccessTokenandrefreshtoken = async (userId : any) => {
+   try {
+       const user = await User.findById(userId)
+       const accessToken = user?.generateRefreshToken()
+       const refreshToken = user?.generateAccessToken()
+
+       if (user) {
+        user.refreshtoken = refreshToken
+       }
+       await user?.save({validateBeforeSave : false})
+
+       return {accessToken , refreshToken}
+
+
+   } catch (error) {
+    throw new ApiError(500 , "Something went wrong while generating refresh token and access token")
+   }
+}
+
+
+const registerUser = asyncHandler(async (req , res) => {
 
 
     // getting data from user
@@ -80,7 +100,7 @@ export  const registerUser = asyncHandler(async (req , res) => {
      )
 })
 
-export const loginUser  =asyncHandler(async(req , res) => {
+const loginUser  =asyncHandler(async(req , res) => {
   const {email , password} = req.body
 
   if (!email && !password) {
@@ -100,4 +120,40 @@ export const loginUser  =asyncHandler(async(req , res) => {
   if (!isPasswordValid) {
     throw new ApiError(401 , "Invalid credentials")
   }
+
+  const {refreshToken , accessToken} =    await generateAccessTokenandrefreshtoken(user._id)
+
+
+  const loggedInUser =  await User.findById(user._id).
+  select("-refreshtoken -password ")
+
+
+  const options = {
+    httpOnly : true,
+    secure : true
+  }
+
+   return res
+   .status(200)
+   .cookie("accessToken" , accessToken , options)
+   .cookie("refreshToken" , refreshToken , options)
+   .json(
+    new ApiResponse(
+      200,
+      {
+        user : loggedInUser , accessToken , refreshToken
+      },
+      "user Logged in succesfully"
+    )
+   )
+
 })
+
+
+const logoutUser = asyncHandler(async()=> {
+
+})
+
+
+
+export  {registerUser , loginUser , logoutUser}

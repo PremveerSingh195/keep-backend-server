@@ -10,10 +10,12 @@ interface IUser extends Document {
     avatar  :string;
     password : string;
     refreshtoken? : string ;
-    isPasswordCorrect (password : string) : Promise<boolean>
-    _id : ObjectId
+    isPasswordCorrect (password : string) : Promise<boolean>;
+    _id : ObjectId;
+    generateAccessToken() : string
+    generateRefreshToken() : string
+    
 }
-
 
 const userSchema = new Schema<IUser>(
     {
@@ -102,4 +104,4 @@ userSchema.methods.generateRefreshToken = function(){
     )
 }
 
-export  const User = mongoose.model<IUser>("User" , userSchema)
+export const User = mongoose.model<IUser>("User" , userSchema)
