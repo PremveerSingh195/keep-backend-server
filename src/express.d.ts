@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import { User } from './models/user.model';
 
 // Extend the Request interface to include 'user'

@@ -151,10 +151,18 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
+
+
+  if (!req.user) {
+    throw new ApiError(401 , "something went wrong");
+    
+  }
+
+
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
+      $unset: {
         refreshToken: undefined,
       },
     },
