@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import bcryptjs from "bcryptjs";
 
 
-interface IUser extends Document {
+export interface IUser extends Document {
     userName : string;
     email : string;
     Fullname : string;
@@ -14,7 +14,6 @@ interface IUser extends Document {
     _id : ObjectId;
     generateAccessToken() : string
     generateRefreshToken() : string
-    
 }
 
 const userSchema = new Schema<IUser>(
@@ -75,13 +74,11 @@ userSchema.methods.generateAccessToken = function(){
 
    return jwt.sign(
         {
-            _id : this._id,
-            email : this.email,
-            userName : this.userName,
-            Fullname : this.Fullname 
+            _id : this._id, 
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
+            algorithm: 'HS256',
             expiresIn : process.env.ACCESS_TOKEN_EXPIRY
         }
     )

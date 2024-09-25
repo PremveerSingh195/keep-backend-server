@@ -4,6 +4,9 @@ import { User } from "../models/user.model";
 import { uploadOnCloudinary } from "../utils/Cloudinary";
 import { ObjectId } from "mongoose";
 import { ApiResponse } from "../utils/ApiResponse";
+import { IGetAuthInfoRequest } from "../express";
+import { Response } from "express";
+
 
 const generateAccessTokenandrefreshtoken = async (userId: any) => {
   try {
@@ -150,16 +153,16 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-const logoutUser = asyncHandler(async (req, res) => {
+const logoutUser = asyncHandler<IGetAuthInfoRequest>(async (req , res ) => {
 
 
-  if (!req.user) {
-    throw new ApiError(401 , "something went wrong");
-    
+  if(!req.user) {
+    throw new ApiError(500 , "something went wrong")
   }
 
-
+  
   await User.findByIdAndUpdate(
+
     req.user._id,
     {
       $unset: {
