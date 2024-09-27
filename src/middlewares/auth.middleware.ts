@@ -14,8 +14,8 @@ export const verifyJWT = asyncHandler(async (req: IGetAuthInfoRequest, _, next) 
     if (!token) {
       throw new ApiError(401, "Unauthorized request")
     }
-    if (process.env.REFRESH_TOKEN_SECRET) {
-      const decodedToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+    if (process.env.ACCESS_TOKEN_SECRET) {
+      const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
       console.log(decodedToken , "decoded token -----------");
       
