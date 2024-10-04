@@ -11,8 +11,8 @@ import { Response } from "express";
 const generateAccessTokenandrefreshtoken = async (userId: any) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user?.generateRefreshToken();
-    const refreshToken = user?.generateAccessToken();
+    const refreshToken = user?.generateRefreshToken();
+    const accessToken = user?.generateAccessToken();
 
     if (user) {
       user.refreshtoken = refreshToken;
